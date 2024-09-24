@@ -2,9 +2,8 @@ name: Run Affordability Analysis Script
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 13 * *'  # Fixed the cron syntax
+    - cron: '0 0 13 * *'
 
-# Add this permissions block
 permissions:
   contents: write
 
@@ -35,5 +34,19 @@ jobs:
       env:
         GREENFIELD_PAT: ${{ secrets.GREENFIELD_PAT }}
       run: |
-        git remote add greenfield https://x-access-token:${GREENFIELD_PAT}@github.com/CommunityScale/Greenfield.git
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git remote add greenfield https://${{ secrets.GREENFIELD_PAT }}@github.com/CommunityScale/Greenfield.git
         git push greenfield main
+    - name: Debug Information
+      if: failure()
+      run: |
+        echo "Current directory: $(pwd)"
+        echo "Repository contents:"
+        ls -la
+        echo "Git remotes:"
+        git remote -v
+        echo "Git status:"
+        git status
+        echo "Git log (last 5 commits):"
+        git log -n 5 --oneline
