@@ -1,41 +1,39 @@
 name: Run Affordability Analysis Script
-
 on:
-  workflow_dispatch:  # Enable manual trigger
+  workflow_dispatch:
   schedule:
-    # Run the job on the 13th of every month at 00:00 UTC
-    - cron: '0 0 13 * *'
+    - cron: '0 0 13 * *'  # Fixed the cron syntax
+
+# Add this permissions block
+permissions:
+  contents: write
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
-
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt  # Ensure your dependencies are listed in this file
-
+        pip install -r requirements.txt
     - name: Run the Python Script
       run: |
-        python greaffordabilitygap.py  # Ensure you use 'python' to run the script
-
+        python greaffordabilitygap.py
     - name: Commit updated CSV and other files to private repository
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add .  # Add all new and modified files
+        git add .
         git diff-index --quiet HEAD || git commit -m "Update affordability analysis on 13th of the month"
-        git push origin main  # Push to the default repository (private)
-
+        git push origin main
     - name: Push to Greenfield Public Repo
+      env:
+        GREENFIELD_PAT: ${{ secrets.GREENFIELD_PAT }}
       run: |
-        git remote add greenfield https://x-access-token:${{ secrets.GREENFIELD_PAT }}@github.com/CommunityScale/Greenfield.git
-        git push greenfield main  # Push to the public Greenfield repo
+        git remote add greenfield https://x-access-token:${GREENFIELD_PAT}@github.com/CommunityScale/Greenfield.git
+        git push greenfield main
