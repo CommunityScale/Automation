@@ -1,0 +1,37 @@
+name: Run Affordability Analysis Notebook
+
+on:
+  schedule:
+    # Run the job on the 13th of every month at 00:00 UTC
+    - cron: '0 0 13 * *'
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt  # Ensure your dependencies are listed in this file
+        pip install papermill  # To run the notebook
+        pip install requests
+
+    - name: Run the Notebook
+      run: |
+        papermill GREAffordabilityGap.ipynb output_notebook.ipynb
+
+    - name: Commit updated CSV to GitHub
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add c_income_zhvi_mortgage_comprehensive_affordability.csv
+        git commit -m "Update affordability analysis on 13th of the month"
+        git push
