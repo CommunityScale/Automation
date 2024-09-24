@@ -23,9 +23,9 @@ jobs:
       run: |
         pip install -r requirements.txt  # Ensure your dependencies are listed in this file
 
-    - name: Run Python Script
+    - name: Run the Python Script
       run: |
-        greaffordabilitygap.py
+        python greaffordabilitygap.py  # Ensure you use 'python' to run the script
 
     - name: Commit updated CSV to GitHub
       run: |
