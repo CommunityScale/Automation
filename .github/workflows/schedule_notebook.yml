@@ -37,5 +37,5 @@ jobs:
 
     - name: Push to Greenfield Public Repo
       run: |
-        git remote add greenfield https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/CommunityScale/Greenfield.git
+        git remote add greenfield https://x-access-token:${{ secrets.GREENFIELD_PAT }}@github.com/CommunityScale/Greenfield.git
         git push greenfield main  # Push to the public Greenfield repo
