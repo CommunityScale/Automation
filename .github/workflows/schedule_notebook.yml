@@ -1,4 +1,4 @@
-name: Run Affordability Analysis Notebook
+name: Run Affordability Analysis Script
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
     - cron: '0 0 13 * *'
 
 jobs:
-  run-notebook:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,12 +21,10 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt  # Ensure your dependencies are listed in this file
-        pip install papermill  # To run the notebook
-        pip install requests
 
-    - name: Run the Notebook
+    - name: Run Python Script
       run: |
-        papermill GREAffordabilityGap.ipynb output_notebook.ipynb
+        greaffordabilitygap.py
 
     - name: Commit updated CSV to GitHub
       run: |
