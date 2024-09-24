@@ -1,6 +1,7 @@
 name: Run Affordability Analysis Script
 
 on:
+  workflow_dispatch:  # Enable manual trigger
   schedule:
     # Run the job on the 13th of every month at 00:00 UTC
     - cron: '0 0 13 * *'
