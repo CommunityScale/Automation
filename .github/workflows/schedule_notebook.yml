@@ -27,15 +27,10 @@ jobs:
       run: |
         python greaffordabilitygap.py  # Ensure you use 'python' to run the script
 
-    - name: Commit updated CSV and other files to private repository
+    - name: Commit updated CSV to GitHub
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git add .  # Add all new and modified files
-        git diff-index --quiet HEAD || git commit -m "Update affordability analysis on 13th of the month"
-        git push origin main  # Push to the default repository (private)
-
-    - name: Push to Greenfield Public Repo
-      run: |
-        git remote add greenfield https://x-access-token:${{ secrets.GREENFIELD_PAT }}@github.com/CommunityScale/Greenfield.git
-        git push greenfield main  # Push to the public Greenfield repo
+        git add c_income_zhvi_mortgage_comprehensive_affordability.csv
+        git commit -m "Update affordability analysis on 13th of the month"
+        git push
